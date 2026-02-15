@@ -1,0 +1,8 @@
+1,Fitness
+2,Yoga
+3,Zumba
+4,Stretching
+5,Resistance
+6,Cardio
+7,CrossFit
+8,Pilates

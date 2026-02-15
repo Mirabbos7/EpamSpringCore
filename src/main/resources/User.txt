@@ -1,0 +1,10 @@
+USER,1,John,Smith,John.Smith,pass123456,true
+USER,2,Emily,Johnson,Emily.Johnson,pass789012,true
+USER,3,Michael,Brown,Michael.Brown,pass345678,true
+USER,4,Sarah,Davis,Sarah.Davis,pass901234,true
+USER,5,David,Wilson,David.Wilson,pass567890,true
+USER,6,Sarah,Williams,Sarah.Williams,train12345,true
+USER,7,David,Miller,David.Miller,train67890,true
+USER,8,Jessica,Davis,Jessica.Davis,train11111,true
+USER,9,Robert,Anderson,Robert.Anderson,train22222,true
+USER,10,Lisa,Martinez,Lisa.Martinez,train33333,true
