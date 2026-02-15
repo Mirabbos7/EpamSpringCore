@@ -13,7 +13,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-
 public class TrainingType {
     private Long trainingTypeId;
     private String trainingTypeName;

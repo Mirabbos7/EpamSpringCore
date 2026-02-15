@@ -13,7 +13,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-
 public class Trainer {
     private Long trainerId;
     private String specialization;

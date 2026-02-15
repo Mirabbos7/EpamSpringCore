@@ -15,7 +15,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-
 public class Trainee {
     private Long traineeId;
     private LocalDate dateOfBirth;

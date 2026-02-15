@@ -13,7 +13,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-
 public class User {
     private Long userId;
     private String firstName;

@@ -1,5 +1,6 @@
 package org.example.storage;
 
+import lombok.Getter;
 import org.example.entity.Trainee;
 import org.example.entity.Trainer;
 import org.example.entity.Training;
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Component
 public class InMemoryStorage {
 
+    @Getter
     private final Map<Long, User> userStorage = new HashMap<>();
     private final Map<Long, Trainee> traineeStorage = new HashMap<>();
     private final Map<Long, Trainer> trainerStorage = new HashMap<>();
