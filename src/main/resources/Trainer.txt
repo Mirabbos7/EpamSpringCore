@@ -1,5 +1,5 @@
-TRAINER,1,Fitness,6
-TRAINER,2,Yoga,7
-TRAINER,3,Zumba,8
-TRAINER,4,CrossFit,9
-TRAINER,5,Pilates,10
+1,Fitness,6
+2,Yoga,7
+3,Zumba,8
+4,CrossFit,9
+5,Pilates,10

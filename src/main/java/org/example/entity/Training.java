@@ -22,6 +22,6 @@ public class Training {
     private Long trainerId;
     private String trainingName;
     private String trainingType;
-    private LocalDate trainingDate;
     private int trainingDuration;
+    private LocalDate trainingDate;
 }

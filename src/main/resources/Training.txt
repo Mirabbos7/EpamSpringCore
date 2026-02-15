@@ -1,10 +1,10 @@
-TRAINING,1,1,1,Morning Fitness Session,Fitness,60,2024-01-15
-TRAINING,2,2,2,Yoga Basics,Yoga,90,2024-01-16
-TRAINING,3,3,3,Zumba Dance Party,Zumba,45,2024-01-17
-TRAINING,4,1,2,Evening Yoga,Yoga,60,2024-01-18
-TRAINING,5,4,4,CrossFit Intensive,CrossFit,75,2024-01-19
-TRAINING,6,5,5,Pilates Core,Pilates,50,2024-01-20
-TRAINING,7,2,1,Cardio Blast,Fitness,45,2024-01-21
-TRAINING,8,3,4,CrossFit Beginners,CrossFit,60,2024-01-22
-TRAINING,9,1,1,Full Body Workout,Fitness,75,2024-01-23
-TRAINING,10,4,5,Pilates Stretch,Pilates,55,2024-01-24
+1,1,1,Morning Fitness Session,Fitness,60,2024-01-15
+2,2,2,Yoga Basics,Yoga,90,2024-01-16
+3,3,3,Zumba Dance Party,Zumba,45,2024-01-17
+4,1,2,Evening Yoga,Yoga,60,2024-01-18
+5,4,4,CrossFit Intensive,CrossFit,75,2024-01-19
+6,5,5,Pilates Core,Pilates,50,2024-01-20
+7,2,1,Cardio Blast,Fitness,45,2024-01-21
+8,3,4,CrossFit Beginners,CrossFit,60,2024-01-22
+9,1,1,Full Body Workout,Fitness,75,2024-01-23
+10,4,5,Pilates Stretch,Pilates,55,2024-01-24
