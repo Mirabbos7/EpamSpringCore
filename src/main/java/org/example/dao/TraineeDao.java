@@ -34,6 +34,9 @@ public class TraineeDao {
         storage.getTraineeStorage().remove(id);
     }
 
+
+    // TODO:
+    //  no action items here, just very good that you use Optional
     public Optional<Trainee> findById(Long id) {
         return Optional.ofNullable(storage.getTraineeStorage().get(id));
     }

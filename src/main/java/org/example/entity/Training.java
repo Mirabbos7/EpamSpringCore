@@ -21,6 +21,9 @@ public class Training {
     private Long trainerId;
     private String trainingName;
     private String trainingType;
+    // TODO:
+    //  Is duration in minutes, hours, seconds, etc.?
+    //  You can for example leave a comment or give a field more descriptive name
     private int trainingDuration;
     private LocalDate trainingDate;
 }
