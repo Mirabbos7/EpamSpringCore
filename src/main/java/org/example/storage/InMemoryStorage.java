@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
+@Getter
 public class InMemoryStorage {
 
-    @Getter
     private final Map<Long, User> userStorage = new HashMap<>();
     private final Map<Long, Trainee> traineeStorage = new HashMap<>();
     private final Map<Long, Trainer> trainerStorage = new HashMap<>();
