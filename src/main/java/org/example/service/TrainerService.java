@@ -1,11 +1,9 @@
 package org.example.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.dao.TrainerDao;
-import org.example.dao.UserDao;
 import org.example.entity.Trainer;
 import org.example.entity.User;
-import org.example.utils.PasswordGenerator;
-import org.example.utils.UsernameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TrainerService {
 
     private TrainerDao trainerDao;
-    private UserDao userDao;
-    private UsernameGenerator usernameGenerator;
-    private PasswordGenerator passwordGenerator;
+    private UserService userService;
 
     @Autowired
     public void setTrainerDao(TrainerDao trainerDao) {
@@ -26,49 +23,28 @@ public class TrainerService {
     }
 
     @Autowired
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    @Autowired
-    public void setUsernameGenerator(UsernameGenerator usernameGenerator) {
-        this.usernameGenerator = usernameGenerator;
-    }
-
-    @Autowired
-    public void setPasswordGenerator(PasswordGenerator passwordGenerator) {
-        this.passwordGenerator = passwordGenerator;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public Trainer create(String firstName, String lastName, String specialization) {
-        String username = usernameGenerator.generateUsername(firstName, lastName, userDao::existsByUsername);
-        String password = passwordGenerator.generatePassword();
-
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setActive(true);
-        user = userDao.create(user);
+        User user = userService.createUser(firstName, lastName);
 
         Trainer trainer = new Trainer();
         trainer.setUserId(user.getUserId());
         trainer.setSpecialization(specialization);
-        trainer = trainerDao.create(trainer);
 
-        return trainer;
+        log.info("Creating trainer for user: {}", user.getUsername());
+        return trainerDao.create(trainer);
     }
 
     public Trainer update(Long trainerId, String specialization) {
-        Optional<Trainer> existing = trainerDao.findById(trainerId);
-        if (!existing.isPresent()) {
-            throw new IllegalArgumentException("Trainer not found");
-        }
+        Trainer trainer = trainerDao.findById(trainerId)
+                .orElseThrow(() -> new IllegalArgumentException("Trainer not found: " + trainerId));
 
-        Trainer trainer = existing.get();
         trainer.setSpecialization(specialization);
 
+        log.info("Updating trainer with id: {}", trainerId);
         return trainerDao.update(trainer);
     }
 

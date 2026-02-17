@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.entity.TrainingType;
 import org.example.storage.InMemoryStorage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,29 +11,33 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Slf4j
 public class TrainingTypeDao {
 
     private InMemoryStorage storage;
 
     @Autowired
-    public void setStorage(InMemoryStorage storage){
+    public void setStorage(InMemoryStorage storage) {
         this.storage = storage;
     }
 
-    public TrainingType create(TrainingType training){
+    public TrainingType create(TrainingType trainingType) {
         Long id = storage.getNextTrainingTypeId();
-        training.setTrainingTypeId(id);
-        storage.getTrainingTypeStorage().put(id, training);
-        return training;
+        trainingType.setTrainingTypeId(id);
+        storage.getTrainingTypeStorage().put(id, trainingType);
+        log.info("Created trainingType with id: {}", id);
+        return trainingType;
     }
 
-    public TrainingType update(TrainingType trainingType){
+    public TrainingType update(TrainingType trainingType) {
         storage.getTrainingTypeStorage().put(trainingType.getTrainingTypeId(), trainingType);
+        log.info("Updated trainingType with id: {}", trainingType.getTrainingTypeId());
         return trainingType;
     }
 
     public void delete(Long id) {
         storage.getTrainingTypeStorage().remove(id);
+        log.info("Deleted trainingType with id: {}", id);
     }
 
     public Optional<TrainingType> findById(Long id) {

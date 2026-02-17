@@ -1,5 +1,6 @@
 package org.example.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.dao.TrainingDao;
 import org.example.entity.Training;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TrainingService {
     private TrainingDao trainingDao;
 
@@ -29,9 +31,8 @@ public class TrainingService {
         training.setTrainingDuration(duration);
         training.setTrainingDate(date);
 
-        training = trainingDao.create(training);
-
-        return training;
+        log.info("Creating training '{}' for traineeId: {}, trainerId: {}", trainingName, traineeId, trainerId);
+        return trainingDao.create(training);
     }
 
     public Optional<Training> select(Long trainingId) {
