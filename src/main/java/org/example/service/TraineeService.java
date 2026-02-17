@@ -76,8 +76,7 @@ public class TraineeService {
     public Trainee update(Long traineeId, LocalDate dateOfBirth, String address) {
 
         // TODO:
-        //  Optional has `orElseThrow` method which can be used here
-        //  to simplify the code and avoid explicit check for presence of value
+        //  Consider using `existing.orElseThrow` to simplify the code and avoid explicit check for presence of value
         Optional<Trainee> existing = traineeDao.findById(traineeId);
         if (!existing.isPresent()) {
             throw new IllegalArgumentException("Trainee not found");

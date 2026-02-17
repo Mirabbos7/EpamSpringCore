@@ -87,7 +87,7 @@ public class InMemoryStorage {
         } catch (IOException e) {
             // TODO:
             //  [Optional]
-            //  This works AS IS, but let’s think it through
+            //  Catching exception works AS IS, but let’s think it through
             //  Do we still want to start the app if the initial data failed to load?
             //  Which one is better here fail-fast vs graceful degradation?
             e.printStackTrace();
