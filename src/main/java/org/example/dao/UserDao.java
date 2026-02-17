@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.entity.User;
 import org.example.storage.InMemoryStorage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Slf4j
 public class UserDao {
 
     private InMemoryStorage storage;
@@ -23,16 +25,19 @@ public class UserDao {
         Long id = storage.getNextUserId();
         user.setUserId(id);
         storage.getUserStorage().put(id, user);
+        log.info("Created user with id: {}, username: {}", id, user.getUsername());
         return user;
     }
 
     public User update(User user) {
         storage.getUserStorage().put(user.getUserId(), user);
+        log.info("Updated user with id: {}", user.getUserId());
         return user;
     }
 
     public void delete(Long id) {
         storage.getUserStorage().remove(id);
+        log.info("Deleted user with id: {}", id);
     }
 
     public Optional<User> findById(Long id) {
