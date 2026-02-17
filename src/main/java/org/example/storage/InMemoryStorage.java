@@ -52,7 +52,7 @@ public class InMemoryStorage {
 
     private void loadFile(Resource resource) {
         if (!resource.exists()) {
-            throw new IllegalStateException("Resource not found: " + resource.getDescription());
+            throw new IllegalStateException("Resource not found: " + resource.getFilename());
         }
 
         try (BufferedReader reader =
@@ -70,7 +70,7 @@ public class InMemoryStorage {
             }
 
         } catch (IOException e) {
-            throw new IllegalStateException("Failed to load resource: " + resource.getDescription(), e);
+            throw new IllegalStateException("Failed to load resource: " + resource.getFilename(), e);
         }
     }
 
