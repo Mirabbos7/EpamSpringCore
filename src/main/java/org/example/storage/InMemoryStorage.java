@@ -1,12 +1,14 @@
 package org.example.storage;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.example.entity.Trainee;
 import org.example.entity.Trainer;
 import org.example.entity.Training;
 import org.example.entity.TrainingType;
 import org.example.entity.User;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
@@ -19,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 @Getter
+@Slf4j
 public class InMemoryStorage {
 
     private final Map<Long, User> userStorage = new HashMap<>();
@@ -33,39 +36,28 @@ public class InMemoryStorage {
     private final AtomicLong trainingIdCounter = new AtomicLong(1);
     private final AtomicLong trainingTypeIdCounter = new AtomicLong(1);
 
-    private static final String TRAINING_TYPE_FILE = "src/main/resources/TrainingType.txt";
-    private static final String USERS_FILE = "src/main/resources/Users.txt";
-    private static final String TRAINEES_FILE = "src/main/resources/Trainees.txt";
-    private static final String TRAINERS_FILE = "src/main/resources/Trainers.txt";
-    private static final String TRAININGS_FILE = "src/main/resources/Trainings.txt";
+    @Value("${storage.file.trainingTypes}")
+    private String trainingTypeFile;
+
+    @Value("${storage.file.users}")
+    private String usersFile;
+
+    @Value("${storage.file.trainees}")
+    private String traineesFile;
+
+    @Value("${storage.file.trainers}")
+    private String trainersFile;
+
+    @Value("${storage.file.trainings}")
+    private String trainingsFile;
 
     @PostConstruct
     public void init() {
-        loadTrainingTypes();
-        loadUsers();
-        loadTrainees();
-        loadTrainers();
-        loadTrainings();
-    }
-
-    private void loadTrainingTypes() {
-        loadFile(TRAINING_TYPE_FILE);
-    }
-
-    private void loadUsers() {
-        loadFile(USERS_FILE);
-    }
-
-    private void loadTrainees() {
-        loadFile(TRAINEES_FILE);
-    }
-
-    private void loadTrainers() {
-        loadFile(TRAINERS_FILE);
-    }
-
-    private void loadTrainings() {
-        loadFile(TRAININGS_FILE);
+        loadFile(trainingTypeFile);
+        loadFile(usersFile);
+        loadFile(traineesFile);
+        loadFile(trainersFile);
+        loadFile(trainingsFile);
     }
 
     private void loadFile(String filePath) {
@@ -75,41 +67,31 @@ public class InMemoryStorage {
                 parseLine(line.trim());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to load file: " + filePath, e);
         }
     }
 
-    private boolean parseLine(String line) {
+    private void parseLine(String line) {
         if (line.isEmpty() || line.startsWith("#")) {
-            return false;
+            return;
         }
 
         String[] parts = line.split(",");
         if (parts.length < 2) {
-            return false;
+            return;
         }
 
         try {
-            if (parts.length == 2) {
-                parseTrainingType(parts);
-                return true;
-            } else if (parts.length == 6) {
-                parseUser(parts);
-                return true;
-            } else if (parts.length == 4) {
-                parseTrainee(parts);
-                return true;
-            } else if (parts.length == 3) {
-                parseTrainer(parts);
-                return true;
-            } else if (parts.length == 7) {
-                parseTraining(parts);
-                return true;
+            switch (parts.length) {
+                case 2 -> parseTrainingType(parts);
+                case 3 -> parseTrainer(parts);
+                case 4 -> parseTrainee(parts);
+                case 6 -> parseUser(parts);
+                case 7 -> parseTraining(parts);
+                default -> log.warn("Unknown line format, skipping: {}", line);
             }
-            return false;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            log.error("Failed to parse line: {}", line, e);
         }
     }
 
@@ -148,7 +130,7 @@ public class InMemoryStorage {
         Long userId = Long.parseLong(parts[3].trim());
 
         if (!userStorage.containsKey(userId)) {
-            System.out.println("ERROR: User " + userId + " not found for Trainee");
+            log.error("User {} not found for Trainee {}, skipping", userId, traineeId);
             return;
         }
 
@@ -165,7 +147,7 @@ public class InMemoryStorage {
         Long userId = Long.parseLong(parts[2].trim());
 
         if (!userStorage.containsKey(userId)) {
-            System.out.println("ERROR: User " + userId + " not found for Trainer");
+            log.error("User {} not found for Trainer {}, skipping", userId, trainerId);
             return;
         }
 
@@ -186,11 +168,11 @@ public class InMemoryStorage {
         LocalDate date = LocalDate.parse(parts[6].trim());
 
         if (!traineeStorage.containsKey(traineeId)) {
-            System.out.println("ERROR: Trainee " + traineeId + " not found for Training");
+            log.error("Trainee {} not found for Training {}, skipping", traineeId, trainingId);
             return;
         }
         if (!trainerStorage.containsKey(trainerId)) {
-            System.out.println("ERROR: Trainer " + trainerId + " not found for Training");
+            log.error("Trainer {} not found for Training {}, skipping", trainerId, trainingId);
             return;
         }
 
