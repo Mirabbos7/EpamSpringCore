@@ -1,6 +1,7 @@
 package org.example.storage;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.entity.Trainee;
 import org.example.entity.Trainer;
@@ -8,18 +9,22 @@ import org.example.entity.Training;
 import org.example.entity.TrainingType;
 import org.example.entity.User;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.core.io.Resource;
+
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
+@RequiredArgsConstructor
 @Getter
 @Slf4j
 public class InMemoryStorage {
@@ -36,40 +41,39 @@ public class InMemoryStorage {
     private final AtomicLong trainingIdCounter = new AtomicLong(1);
     private final AtomicLong trainingTypeIdCounter = new AtomicLong(1);
 
-    @Value("${storage.file.trainingTypes}")
-    private String trainingTypeFile;
-
-    @Value("${storage.file.users}")
-    private String usersFile;
-
-    @Value("${storage.file.trainees}")
-    private String traineesFile;
-
-    @Value("${storage.file.trainers}")
-    private String trainersFile;
-
-    @Value("${storage.file.trainings}")
-    private String trainingsFile;
+    private final List<Resource> initFiles;
 
     @PostConstruct
     public void init() {
-        loadFile(trainingTypeFile);
-        loadFile(usersFile);
-        loadFile(traineesFile);
-        loadFile(trainersFile);
-        loadFile(trainingsFile);
-    }
-
-    private void loadFile(String filePath) {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                parseLine(line.trim());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load file: " + filePath, e);
+        for (Resource resource : initFiles) {
+            loadFile(resource);
         }
     }
+
+    private void loadFile(Resource resource) {
+        if (!resource.exists()) {
+            throw new IllegalStateException("Resource not found: " + resource.getDescription());
+        }
+
+        try (BufferedReader reader =
+                     new BufferedReader(
+                             new InputStreamReader(
+                                     resource.getInputStream(),
+                                     StandardCharsets.UTF_8))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String trimmed = line.trim();
+                if (!trimmed.isEmpty()) {
+                    parseLine(trimmed);
+                }
+            }
+
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load resource: " + resource.getDescription(), e);
+        }
+    }
+
 
     private void parseLine(String line) {
         if (line.isEmpty() || line.startsWith("#")) {

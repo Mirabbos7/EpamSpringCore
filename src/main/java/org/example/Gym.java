@@ -7,7 +7,6 @@ import org.example.entity.Training;
 import org.example.service.TraineeService;
 import org.example.service.TrainerService;
 import org.example.service.TrainingService;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDate;
@@ -17,7 +16,7 @@ public class Gym {
     public static void main(String[] args) {
         System.out.println("=== Starting Gym CRM System ===");
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         TraineeService traineeService = context.getBean(TraineeService.class);
         TrainerService trainerService = context.getBean(TrainerService.class);
@@ -74,6 +73,6 @@ public class Gym {
 
         System.out.println("\n=== Gym CRM System finished ===");
 
-        ((AnnotationConfigApplicationContext) context).close();
+        context.close();
     }
 }

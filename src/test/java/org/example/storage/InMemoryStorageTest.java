@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +19,7 @@ class InMemoryStorageTest {
 
     @BeforeEach
     void setUp() {
-        storage = new InMemoryStorage();
+        storage = new InMemoryStorage(List.of());
     }
 
     @Test
@@ -185,6 +186,11 @@ class InMemoryStorageTest {
         assertTrue(storage.getTrainingTypeStorage().isEmpty());
     }
 
+    // TODO:
+    //  Using reflection in tests is usually a signal of a design issue!
+    //  You are testing implementation details instead of behavior
+    //  If the parsing/loading logic is important enough to have dedicated unit tests,
+    //  consider extracting it into a separate class or making methods package-private as a compromise.
     private void invokeParseLine(InMemoryStorage storage, String line) {
         try {
             var method = InMemoryStorage.class.getDeclaredMethod("parseLine", String.class);
