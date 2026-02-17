@@ -33,6 +33,16 @@ public class InMemoryStorage {
     private final AtomicLong trainingIdCounter = new AtomicLong(1);
     private final AtomicLong trainingTypeIdCounter = new AtomicLong(1);
 
+    // TODO:
+    //  1. This looks quite repetitive. Path prefix `src/main/resources` is the same,
+    //  .txt is the same, loadFile() call is also the same, only file name is different.
+    //  Can you think of a generalized solution?
+    //  OR
+    //  2. You could try using @Value + org.springframework.core.io.Resource instead of hardcoded paths.
+    //  In Spring applications, Resource is preferred over File because it abstracts the actual source
+    //  (classpath, filesystem, URL, etc.) and decouples code from environment assumptions:
+    //  Our app can be deployed in a way where file system is not accessible, but classpath is, or vice versa
+
     private static final String TRAINING_TYPE_FILE = "src/main/resources/TrainingType.txt";
     private static final String USERS_FILE = "src/main/resources/Users.txt";
     private static final String TRAINEES_FILE = "src/main/resources/Trainees.txt";
@@ -75,6 +85,11 @@ public class InMemoryStorage {
                 parseLine(line.trim());
             }
         } catch (IOException e) {
+            // TODO:
+            //  [Optional]
+            //  This works AS IS, but let’s think it through
+            //  Do we still want to start the app if the initial data failed to load?
+            //  Which one is better here fail-fast vs graceful degradation?
             e.printStackTrace();
         }
     }
@@ -89,6 +104,10 @@ public class InMemoryStorage {
             return false;
         }
 
+        // TODO:
+        //  1. You don't need else branch when you have `return` on the previous branch
+        //  Similarly to what you've done above you can use guarding ifs here as well
+        //  2. [Optional] you can also try switch: 2 -> parseTrainingType, 3-> parseUser, ... , default -> return false
         try {
             if (parts.length == 2) {
                 parseTrainingType(parts);
